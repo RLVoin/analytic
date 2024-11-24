@@ -4,10 +4,10 @@ import ChartFilledLine from "./_components/ChartFilledLine"
 import ChartBar from "./_components/ChartBar.jsx";
 import ChartLine from "./_components/ChartLine.jsx";
 import ChartPie from "./_components/ChartPie.jsx";
-import {PlusOutlined, PlusSquareTwoTone} from "@ant-design/icons"
+import {PlusOutlined, PlusSquareTwoTone, SettingFilled} from "@ant-design/icons"
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Select, Spin} from "antd";
+import {Select, Spin, FloatButton} from "antd";
 import ModalChart from "@/app/(dashboard)/charts/_components/ModalChart";
 
 export default function ChartPage() {
@@ -23,6 +23,7 @@ export default function ChartPage() {
         // { Component: ChartLine, key: 'line' },
         // { Component: ChartPie, key: 'pie' },
     ]);
+    const [selectedDeps, setSelectedDeps] = useState({});
 
     const openModalhandler = () => {
         setIsModalOpen(true)
@@ -62,10 +63,8 @@ export default function ChartPage() {
             })
     }
     const fetchData = async (ch) => {
-        console.log(ch)
         try {
             if (ch !== undefined) {
-
                 const results = await Promise.all(
                     ch.map(async (item) => {
                         const response = await axios.get("http://localhost:8000/charts/get_data/", {
@@ -82,6 +81,11 @@ export default function ChartPage() {
                 }));
 
                 setCharts(updatedCharts);
+                const updatedDeps = {};
+                updatedCharts.forEach((chart, index) => {
+                    updatedDeps[index] = updatedCharts[index].data.map(item => item[0].departament.departament);
+                });
+                setSelectedDeps(updatedDeps);
             }
         } catch (error) {
             console.error("Ошибка при получении данных графиков:", error);
@@ -97,7 +101,12 @@ export default function ChartPage() {
             const updatedCharts = [...charts]
             updatedCharts[index].data = groupData(res)
             setCharts(updatedCharts);
+            setSelectedDeps((prev) => ({
+                ...prev,
+                [index]: updatedCharts[index].data.map(item => item[0].departament.departament),
+            }));
         })
+
     }
 
     const fetchDirections = async () => {
@@ -127,43 +136,68 @@ export default function ChartPage() {
         fetchData()
     }, [selectedDir]);
 
-    console.log(charts)
+    // console.log(charts)
     return (
         <div>
             <ModalChart isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
             <div className="flex flex-wrap justify-evenly gap-y-3 mt-4 w-screen max-w-[95vw]">
-                {charts.map(({Component, key, directionId, data}, index) => (
-                    <div key={index} className="flex flex-col bg-[#fff] rounded-md min-w-[530px] min-h-[400px]">
-                        <Spin className="mx-auto my-auto" size="large" spinning={!data.length > 0}>
-                            <div className="flex gap-2 justify-end mr-1 mt-1">
-                                <Select
-                                    placeholder="Параметр 1"
-                                    className="w-[250px]"
-                                    defaultValue={directionId}
-                                    onChange={selectedDir => {
-                                        console.log(selectedDir)
-                                        const updatedCharts = [...charts];
-                                        updatedCharts[index].directionId = selectedDir; // Update directionId
-                                        setCharts(updatedCharts);
-                                        updateChart(selectedDir, index)
-                                    }}
-                                >
-                                    {direction.map((item, index) => (
-                                        <Select.Option key={item.id} value={item.id}>
-                                            {item.direction}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                                {/*<Select className="w-[150px]"/>*/}
-                            </div>
-                            <div>
-                                <Component data={data}/>
-                            </div>
-                        </Spin>
-                    </div>
-                ))}
+                {charts.map(({Component, key, directionId, data}, index) => {
+                    console.log(charts[index]);
+                    return (
+                        <div key={index} className="flex flex-col bg-[#fff] rounded-md min-w-[530px] min-h-[400px]">
+
+                            {/*{console.log(charts)}*/}
+                            <Spin className="mx-auto my-auto" size="large" spinning={!data.length > 0}>
+                                <div className="flex gap-2 justify-end mr-1 mt-1">
+                                    <Select
+                                        placeholder="Параметр 1"
+                                        className="w-[250px]"
+                                        defaultValue={directionId}
+                                        onChange={selectedDir => {
+                                            console.log(selectedDir)
+                                            const updatedCharts = [...charts];
+                                            updatedCharts[index].directionId = selectedDir; // Update directionId
+                                            setCharts(updatedCharts);
+                                            updateChart(selectedDir, index)
+                                        }}
+                                    >
+                                        {direction.map((item, index) => (
+                                            <Select.Option key={item.id} value={item.id}>
+                                                {item.direction}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                    <Select
+                                        className="w-[250px]"
+                                        mode="multiple"
+                                        maxTagCount="responsive"
+                                        value={selectedDeps[index] || []}
+                                        onChange={selectedValues => {
+                                            setSelectedDeps(prev => ({ ...prev, [index]: selectedValues }));
+                                        }}
+                                    >
+                                        {data.map((item) => (
+                                            <Select.Option key={item[0].departament.departament} value={item[0].departament.departament}>
+                                                {item[0].departament.departament}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                    {/*<Select className="w-[150px]"/>*/}
+                                </div>
+                                <div>
+                                    <Component data={data} deps={selectedDeps[index]}/>
+                                </div>
+                            </Spin>
+                        </div>
+                    )
+
+                })}
             </div>
-            <PlusSquareTwoTone onClick={openModalhandler} className="absolute right-0 top-16 text-5xl"/>
+            <FloatButton style={{
+                width: '50px',
+                height: '50px',
+            }} icon={<SettingFilled className="text-2xl -ml-0.5"/>}/>
+            {/*<PlusSquareTwoTone onClick={openModalhandler} className="absolute right-0 top-16 text-5xl"/>*/}
         </div>
     )
 }

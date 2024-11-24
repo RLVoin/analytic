@@ -50,13 +50,13 @@ export default function DashBoardLayout({children}) {
                 {/*        items={items}*/}
                 {/*    />*/}
                 {/*</Sider>*/}
-                <Layout style={{backgroundColor: '#e6eaf2', minWidth: '100vw'}}>
+                <Layout style={{backgroundColor: '#e6eaf2', minWidth: '100%'}}>
                     <Header
                         style={{
                             padding: 0,
                             fontWeight: 500,
                             backgroundColor: '#f0f2f7',
-                            minWidth: '100vw'
+                            minWidth: '100%'
                         }}
                     >
                         <Menu
