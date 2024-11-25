@@ -271,14 +271,14 @@ const DataTable = (props) => {
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
-                onClick: () => {
+                onDoubleClick: () => {
                     if (editingKey === '') {
                         edit(record);
                     }
                 },
-                onDoubleClick: () => {
-                    save(record)
-                }
+                // onDoubleClick: () => {
+                //     save(record)
+                // }
                 // onCell: (record, rowIndex) => {
                 //     return {
                 //         onClick: (event) => {

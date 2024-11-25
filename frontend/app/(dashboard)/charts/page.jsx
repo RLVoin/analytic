@@ -16,6 +16,7 @@ export default function ChartPage() {
     const [selectedDep, setSelectedDep] = useState(null)
     const [selectedDir, setSelectedDir] = useState(1)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [config, setConfig] = useState([])
     const [charts, setCharts] = useState([
         // {Component: ChartFilledLine, key: 'filledLine', directionId: 1, data: []},
         // {Component: ChartBar, key: 'bar', directionId: 2, data: []},
@@ -48,6 +49,7 @@ export default function ChartPage() {
         await axios.get("http://localhost:8000/charts/get_config")
             .then(res => {
                 if (res.status === 200) {
+                    setConfig(res.data.config)
                     const updatedCharts = res.data.config.map(item => {
                         switch (item.Component) {
                             case 'ChartFilledLine':
@@ -139,8 +141,8 @@ export default function ChartPage() {
     // console.log(charts)
     return (
         <div>
-            <ModalChart isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
-            <div className="flex flex-wrap justify-evenly gap-y-3 mt-4 w-screen max-w-[95vw]">
+            <ModalChart isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} config={config} direction={direction}/>
+            <div className="flex flex-wrap justify-start gap-y-3 gap-x-2 mt-4 w-screen max-w-[95vw]">
                 {charts.map(({Component, key, directionId, data}, index) => {
                     console.log(charts[index]);
                     return (
@@ -173,11 +175,12 @@ export default function ChartPage() {
                                         maxTagCount="responsive"
                                         value={selectedDeps[index] || []}
                                         onChange={selectedValues => {
-                                            setSelectedDeps(prev => ({ ...prev, [index]: selectedValues }));
+                                            setSelectedDeps(prev => ({...prev, [index]: selectedValues}));
                                         }}
                                     >
                                         {data.map((item) => (
-                                            <Select.Option key={item[0].departament.departament} value={item[0].departament.departament}>
+                                            <Select.Option key={item[0].departament.departament}
+                                                           value={item[0].departament.departament}>
                                                 {item[0].departament.departament}
                                             </Select.Option>
                                         ))}
@@ -196,7 +199,9 @@ export default function ChartPage() {
             <FloatButton style={{
                 width: '50px',
                 height: '50px',
-            }} icon={<SettingFilled className="text-2xl -ml-0.5"/>}/>
+            }}
+                         onClick={openModalhandler}
+                         icon={<SettingFilled className="text-2xl -ml-0.5"/>}/>
             {/*<PlusSquareTwoTone onClick={openModalhandler} className="absolute right-0 top-16 text-5xl"/>*/}
         </div>
     )

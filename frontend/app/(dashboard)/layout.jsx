@@ -62,6 +62,7 @@ export default function DashBoardLayout({children}) {
                         <Menu
                             style={{
                                 width: '100%',
+                                paddingLeft: '30px',
                                 fontWeight: 500,
                             }}
                             theme="dark"
