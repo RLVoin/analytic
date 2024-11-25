@@ -20,19 +20,19 @@ export default function ModalChart(props) {
 
     const charts = [
         {
-            label: 'FilledChart',
+            label: 'График с областями',
             value: 'ChartFilledLine'
         },
         {
-            label: 'BarChart',
+            label: 'Гистограмма',
             value: 'ChartBar'
         },
         {
-            label: 'LineChart',
+            label: 'График линейный',
             value: 'ChartLine'
         },
         {
-            label: 'PieChart',
+            label: 'График круговой',
             value: 'ChartPie'
         },
     ]

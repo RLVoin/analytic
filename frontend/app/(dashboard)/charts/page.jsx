@@ -9,6 +9,7 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {Select, Spin, FloatButton} from "antd";
 import ModalChart from "@/app/(dashboard)/charts/_components/ModalChart";
+import chartPie from "./_components/ChartPie.jsx";
 
 export default function ChartPage() {
     const [direction, setDirection] = useState([])
@@ -56,6 +57,8 @@ export default function ChartPage() {
                                 return {...item, Component: ChartFilledLine};
                             case 'ChartBar':
                                 return {...item, Component: ChartBar};
+                            case 'ChartPie':
+                                return {...item, Component: ChartPie};
                             default:
                                 return item;
                         }
@@ -203,6 +206,7 @@ export default function ChartPage() {
                          onClick={openModalhandler}
                          icon={<SettingFilled className="text-2xl -ml-0.5"/>}/>
             {/*<PlusSquareTwoTone onClick={openModalhandler} className="absolute right-0 top-16 text-5xl"/>*/}
+            {/*<ChartPie data={charts[0].data}/>*/}
         </div>
     )
 }
