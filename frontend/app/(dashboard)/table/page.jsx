@@ -6,7 +6,7 @@ import {Input, InputNumber, Table, Form, Popconfirm, Typography, ConfigProvider,
 import DataTable from "@/app/(dashboard)/table/_components/DataTable";
 
 export default function TablePage(props){
-
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [data, setData] = useState([]);
     const [tableId, setTableId] = useState(1)
     const [loading, setLoading] = useState(true)
@@ -15,7 +15,7 @@ export default function TablePage(props){
 
     const fetchData = async (table_id) => {
         setData([])
-        await axios.get("http://localhost:8000/charts/get_data/", {
+        await axios.get(`${apiUrl}/charts/get_data/`, {
             params: {
                 table_id: table_id
             }

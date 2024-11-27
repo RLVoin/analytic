@@ -43,7 +43,7 @@ const EditableCell = ({
 
 
 const DataTable = (props) => {
-
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [form] = Form.useForm();
     const [tableId, setTableId] = useState(1)
     const [editingKey, setEditingKey] = useState('');
@@ -76,7 +76,7 @@ const DataTable = (props) => {
                     ...row,
                 });
                 item = newData[index];
-                await axios.put("http://localhost:8000/charts/update_data", {
+                await axios.put(`${apiUrl}/charts/update_data`, {
                     direction_id: item.direction.id,
                     departament_id: item.departament.id,
                     year: item.year,

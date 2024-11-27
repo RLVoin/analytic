@@ -51,7 +51,6 @@ class DataWithTableId(BaseModel):
 
 
 class ChartConfigSchema(BaseModel):
-    id: int
     config: list
 
 

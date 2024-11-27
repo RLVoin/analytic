@@ -157,12 +157,12 @@ async def get_config(session: AsyncSession = Depends(get_async_session)):
     return result_dto
 
 
-@router.put("update_config")
-async def update_config(data: ChartConfigSchema, session: AsyncSession = Depends(get_async_session)):
-
+@router.put("/update_config")
+async def update_config(data: ChartConfigSchema, user: User = Depends(current_user),
+                        session: AsyncSession = Depends(get_async_session)):
     query = (
         select(ChartConfig)
-        .filter(ChartConfig.id == data.id)
+        .filter(ChartConfig.user_id == user.id)
     )
 
     res = await session.execute(query)
@@ -174,5 +174,3 @@ async def update_config(data: ChartConfigSchema, session: AsyncSession = Depends
     await session.commit()
 
     return {"message": "Data updated successfully"}
-
-

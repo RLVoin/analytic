@@ -2,6 +2,7 @@ import React from "react";
 import "@/app/globals.css";
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout'
+import axios from "axios";
 
 
 const headerStyle = {
@@ -31,6 +32,10 @@ const layoutStyle = {
 
 
 export default function ShopLayout({children}) {
+
+    axios.defaults.headers.common = {
+        'ngrok-skip-browser-warning': 1
+    }
 
     return (
         <Layout className="mx-auto" style={layoutStyle}>

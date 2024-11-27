@@ -1,4 +1,4 @@
-import {Bar, BarChart, Brush, Legend, Rectangle, Tooltip, XAxis, YAxis} from "recharts";
+import {Bar, BarChart, Brush, Legend, Rectangle, ReferenceLine, Tooltip, XAxis, YAxis} from "recharts";
 
 const ChartBar = (props) => {
 
@@ -25,7 +25,7 @@ const ChartBar = (props) => {
         <div className="pt-2 pl-2">
             {/*{props.data.length > 0 && <><span>{props.data[0][0].direction.direction}</span></>}*/}
 
-            <BarChart width={500} height={300} data={props.data}
+            <BarChart width={700} height={300} data={props.data}
                       margin={{
                           top: 0,
                           right: 40,
@@ -35,8 +35,10 @@ const ChartBar = (props) => {
                 <XAxis dataKey="month" allowDuplicatedCategory={false} height={40} angle={-45}
                        tick={{fill: '#363c4d', dy: 20}} tickFormatter={formatMonth}/>
                 <YAxis tick={{fill: '#363c4d'}}/>
+                {/*<YAxis tick={{fill: '#363c4d'}} domain={[0, 14]}/>*/}
                 <Tooltip labelFormatter={formatMonth}/>
                 <Legend verticalAlign="top"/>
+                {/*<ReferenceLine y={12} label="Цель" stroke="green" strokeDasharray="3 3" />*/}
                 {/*<Brush dataKey="title" height={30} stroke="#3865D8" fill="#dadde6"/>*/}
                 {props.data.map((item, index) => {
                     const departmentName = item[0].departament.departament;

@@ -12,6 +12,7 @@ import ModalChart from "@/app/(dashboard)/charts/_components/ModalChart";
 import chartPie from "./_components/ChartPie.jsx";
 
 export default function ChartPage() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [direction, setDirection] = useState([])
     const [departament, setDepartament] = useState([])
     const [selectedDep, setSelectedDep] = useState(null)
@@ -47,7 +48,7 @@ export default function ChartPage() {
     }
 
     const fetchConfig = async () => {
-        await axios.get("http://localhost:8000/charts/get_config")
+        await axios.get(`${apiUrl}/charts/get_config`)
             .then(res => {
                 if (res.status === 200) {
                     setConfig(res.data.config)
@@ -55,6 +56,8 @@ export default function ChartPage() {
                         switch (item.Component) {
                             case 'ChartFilledLine':
                                 return {...item, Component: ChartFilledLine};
+                            case 'ChartLine':
+                                return {...item, Component: ChartLine};
                             case 'ChartBar':
                                 return {...item, Component: ChartBar};
                             case 'ChartPie':
@@ -72,7 +75,7 @@ export default function ChartPage() {
             if (ch !== undefined) {
                 const results = await Promise.all(
                     ch.map(async (item) => {
-                        const response = await axios.get("http://localhost:8000/charts/get_data/", {
+                        const response = await axios.get(`${apiUrl}/charts/get_data/`, {
                             params: {direction_id: item.directionId},
                         });
                         return groupData(response);
@@ -98,7 +101,7 @@ export default function ChartPage() {
     }
 
     const updateChart = async (id, index) => {
-        await axios.get("http://localhost:8000/charts/get_data/", {
+        await axios.get(`${apiUrl}/charts/get_data/`, {
             params: {
                 direction_id: id,
             },
@@ -115,14 +118,14 @@ export default function ChartPage() {
     }
 
     const fetchDirections = async () => {
-        await axios.get('http://localhost:8000/charts/get_directions')
+        await axios.get(`${apiUrl}/charts/get_directions`)
             .then((response => {
                 setDirection(response.data)
             }))
     }
 
     const fetchDepartaments = async () => {
-        await axios.get('http://localhost:8000/charts/get_departaments')
+        await axios.get(`${apiUrl}/charts/get_departaments`)
             .then((response => {
                 setDepartament(response.data)
             }))
@@ -144,8 +147,9 @@ export default function ChartPage() {
     // console.log(charts)
     return (
         <div>
-            <ModalChart isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} config={config} direction={direction}/>
-            <div className="flex flex-wrap justify-start gap-y-3 gap-x-2 mt-4 w-screen max-w-[95vw]">
+            <ModalChart isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setConfig={setConfig} config={config}
+                        direction={direction} fetchConfig={fetchConfig}/>
+            <div className="flex flex-wrap justify-center gap-y-4 gap-x-4 mt-4 w-screen max-w-[95vw]">
                 {charts.map(({Component, key, directionId, data}, index) => {
                     console.log(charts[index]);
                     return (

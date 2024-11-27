@@ -1,7 +1,9 @@
-import {ConfigProvider, Layout, Menu, Spin} from 'antd';
+"use client"
+
+import {ConfigProvider, Layout, Menu} from 'antd';
 import {AreaChartOutlined, HomeOutlined, TableOutlined} from '@ant-design/icons';
-import Sider from "antd/es/layout/Sider";
 import {Content, Header} from "antd/es/layout/layout";
+import axios from "axios";
 
 const items = [
     {
@@ -22,6 +24,11 @@ const items = [
 ];
 
 export default function DashBoardLayout({children}) {
+
+    axios.defaults.headers.common = {
+        'ngrok-skip-browser-warning': 1
+    }
+
     return (
         <ConfigProvider
             theme={{

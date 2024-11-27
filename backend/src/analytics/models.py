@@ -99,6 +99,8 @@ class ChartConfig(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     config = Column(JSON)
 
+
+
 # class Employer(Base):
 #     __tablename__ = "employer"
 #

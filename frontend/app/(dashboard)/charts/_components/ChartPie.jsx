@@ -26,7 +26,7 @@ const ChartPie = (props) => {
     };
 
     return (
-        <PieChart width={530} height={300}
+        <PieChart width={700} height={300}
                   margin={{
                       top: 5,
                       right: 30,
@@ -34,7 +34,7 @@ const ChartPie = (props) => {
                       bottom: 5,
                   }}>
             <Tooltip/>
-            <Pie data={departmentsData[0]} dataKey="value" nameKey="title" cx="50%" cy="50%" outerRadius={60} fill="#8884d8"/>
+            <Pie data={departmentsData[0]} legendType="diamond" dataKey="value" nameKey="title" cx="50%" cy="50%" innerRadius={60} fill="#8884d8" label/>
             {/*<Pie data={props.data} dataKey="pv" nameKey="title" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label/>*/}
         </PieChart>
     );

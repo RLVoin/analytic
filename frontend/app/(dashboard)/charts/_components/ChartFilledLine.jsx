@@ -1,4 +1,4 @@
-import {Area, AreaChart, Brush, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import {Area, AreaChart, Brush, Legend, ReferenceLine, Tooltip, XAxis, YAxis} from "recharts";
 
 const ChartFilledLine = (props) => {
     // Предполагается, что props.data - это двумерный массив
@@ -29,7 +29,7 @@ const ChartFilledLine = (props) => {
             {/*)}*/}
 
             <AreaChart
-                width={1100}
+                width={700}
                 height={300}
                 data={departmentsData.flat()} // Объединяем вложенные массивы
                 margin={{
@@ -39,8 +39,10 @@ const ChartFilledLine = (props) => {
                 <XAxis dataKey="month" allowDuplicatedCategory={false} angle={-45} tick={{fill: '#363c4d', dy: 20}}
                        tickFormatter={formatMonth}/>
                 <YAxis tick={{fill: '#363c4d'}}/>
+                {/*<YAxis tick={{fill: '#363c4d'}} domain={[0, 200]}/>*/}
                 <Tooltip labelFormatter={formatMonth}/>
                 <Legend verticalAlign="top"/>
+                {/*<ReferenceLine y={100} label="Цель" stroke="green" strokeDasharray="3 3" />*/}
                 {/*<Brush dataKey="month" height={30} stroke="#3865D8" fill="#dadde6" />*/}
 
                 {departmentsData.map((departmentData, index) => {
