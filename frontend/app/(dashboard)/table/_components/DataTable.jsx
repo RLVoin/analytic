@@ -25,12 +25,6 @@ const EditableCell = ({
                     style={{
                         margin: 0,
                     }}
-                    rules={[
-                        {
-                            required: true,
-                            message: `Пожалуйста, введите ${title}!`,
-                        },
-                    ]}
                 >
                     {inputNode}
                 </Form.Item>

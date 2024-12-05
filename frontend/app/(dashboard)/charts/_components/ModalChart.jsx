@@ -1,7 +1,8 @@
-import {Button, Form, InputNumber, Modal, Select, Space} from "antd";
+import {Button, Form, InputNumber, Modal, Select, Slider, Space} from "antd";
 import {CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function ModalChart(props) {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -113,7 +114,7 @@ export default function ModalChart(props) {
                 onFinish()
             }}>
                 <Space
-                    style={{display: 'flex', marginBottom: 8}}
+                    style={{display: 'flex'}}
                     align="baseline"
                 >
                     <Form.Item label="Тип графика">
@@ -159,86 +160,105 @@ export default function ModalChart(props) {
                         <Button type="primary" htmlType="submit" icon={<PlusOutlined/>}/>
                     </Form.Item>
                 </Space>
+                <Space
+                    style={{display: 'flex', marginBottom: 8}}
+                    align="baseline"
+                >
+                    <Form.Item label="Ширина графика">
+                        <Slider style={{ width: 300 }} defaultValue={30} disabled={true} />
+                    </Form.Item>
+                </Space>
                 {props.config.map((item, index) => {
                     return (
-                        <Space
-                            key={index}
-                            style={{display: 'flex', marginBottom: 8}}
-                            align="baseline"
-                        >
-                            <Form.Item label="Тип графика">
-                                <Select
-                                    disabled={!editIndices.includes(index)}
-                                    style={{
-                                        width: 180
-                                    }}
-                                    onChange={e => console.log(e)}
-                                    options={charts}
-                                    value={item.Component}
-                                />
-                            </Form.Item>
-                            <Form.Item label="Направление">
-                                <Select
-                                    disabled={!editIndices.includes(index)}
-                                    style={{
-                                        width: 210
-                                    }}
-                                    value={item.directionId}
-                                    onChange={e => console.log(e)}
-                                >
-                                    {props.direction.map((item, index) => (
-                                        <Select.Option key={item.id} value={item.id}>
-                                            {item.direction}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                            <Form.Item label="Цель">
-                                <InputNumber
-                                    disabled={!editIndices.includes(index)}
-                                    style={{
-                                        width: 70
-                                    }}
-                                    onChange={e => console.log(e)}
-                                />
-                            </Form.Item>
-                            <Form.Item label=" ">
-                                {!editIndices.includes(index) ?
-                                    <div className="flex">
-                                        <Button
-                                            disabled={editing}
-                                            type="text"
-                                            icon={<EditOutlined/>}
-                                            onClick={() => {
-                                                toggleEdit(index)
-                                                //     setSize(option.size.id)
-                                                //     setTextile(option.textile.id)
-                                                //     setPrice(option.price)
-                                            }}
-                                        />
-                                        <Button
-                                            disabled={editing}
-                                            type="text"
-                                            icon={<DeleteOutlined/>}
-                                            onClick={() => deleteHandler(index)}
-                                        />
-                                    </div>
-                                    :
-                                    <div className="flex">
-                                        <Button
-                                            type="text"
-                                            icon={<CheckOutlined/>}
-                                            // onClick={() => saveHandler(option.id, index)}
-                                        />
-                                        <Button
-                                            type="text"
-                                            icon={<CloseOutlined/>}
-                                            onClick={() => cancelEdit(index)}
-                                        />
-                                    </div>
-                                }
-                            </Form.Item>
-                        </Space>
+                        <div key={index}>
+                            <Space
+
+                                style={{display: 'flex', marginBottom: 8}}
+                                align="baseline"
+                            >
+                                <Form.Item label="Тип графика">
+                                    <Select
+                                        disabled={!editIndices.includes(index)}
+                                        style={{
+                                            width: 180
+                                        }}
+                                        onChange={e => console.log(e)}
+                                        options={charts}
+                                        value={item.Component}
+                                    />
+                                </Form.Item>
+                                <Form.Item label="Направление">
+                                    <Select
+                                        disabled={!editIndices.includes(index)}
+                                        style={{
+                                            width: 210
+                                        }}
+                                        value={item.directionId}
+                                        onChange={e => console.log(e)}
+                                    >
+                                        {props.direction.map((item, index) => (
+                                            <Select.Option key={item.id} value={item.id}>
+                                                {item.direction}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item label="Цель">
+                                    <InputNumber
+                                        disabled={!editIndices.includes(index)}
+                                        style={{
+                                            width: 70
+                                        }}
+                                        onChange={e => console.log(e)}
+                                    />
+                                </Form.Item>
+                                <Form.Item label=" ">
+                                    {!editIndices.includes(index) ?
+                                        <div className="flex">
+                                            <Button
+                                                disabled={editing}
+                                                type="text"
+                                                icon={<EditOutlined/>}
+                                                onClick={() => {
+                                                    toggleEdit(index)
+                                                    //     setSize(option.size.id)
+                                                    //     setTextile(option.textile.id)
+                                                    //     setPrice(option.price)
+                                                }}
+                                            />
+                                            <Button
+                                                disabled={editing}
+                                                type="text"
+                                                icon={<DeleteOutlined/>}
+                                                onClick={() => deleteHandler(index)}
+                                            />
+                                        </div>
+                                        :
+                                        <div className="flex">
+                                            <Button
+                                                type="text"
+                                                icon={<CheckOutlined/>}
+                                                // onClick={() => saveHandler(option.id, index)}
+                                            />
+                                            <Button
+                                                type="text"
+                                                icon={<CloseOutlined/>}
+                                                onClick={() => cancelEdit(index)}
+                                            />
+                                        </div>
+                                    }
+                                </Form.Item>
+                            </Space>
+                            <Space
+                                style={{display: 'flex', marginBottom: 8}}
+                                align="baseline"
+                            >
+                                <Form.Item label="Ширина графика">
+                                    <Slider style={{ width: 300 }} defaultValue={30} disabled={true} />
+                                </Form.Item>
+                            </Space>
+                        </div>
+
                     )
                 })}
             </Form>

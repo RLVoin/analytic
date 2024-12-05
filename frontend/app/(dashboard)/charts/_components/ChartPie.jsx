@@ -25,7 +25,7 @@ const ChartPie = (props) => {
         return digits_to_months[month] || month; // Возвращает название месяца, если нет - возвращает число
     };
 
-    return (
+    return (<div className="pt-2 pl-2">
         <PieChart width={700} height={300}
                   margin={{
                       top: 5,
@@ -34,9 +34,10 @@ const ChartPie = (props) => {
                       bottom: 5,
                   }}>
             <Tooltip/>
+            <Legend/>
             <Pie data={departmentsData[0]} legendType="diamond" dataKey="value" nameKey="title" cx="50%" cy="50%" innerRadius={60} fill="#8884d8" label/>
             {/*<Pie data={props.data} dataKey="pv" nameKey="title" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label/>*/}
-        </PieChart>
+        </PieChart></div>
     );
 };
 
