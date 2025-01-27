@@ -1,5 +1,3 @@
-import array
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, func, join, and_
 from sqlalchemy.orm import selectinload, joinedload
@@ -21,7 +19,7 @@ router = APIRouter(
 
 @router.get("/get_data/")
 async def get_data(table_id: int = None, departament_id: int = None, direction_id: int = None,
-                   session: AsyncSession = Depends(get_async_session)):
+                   session: AsyncSession = Depends(get_async_session)) -> list[DataDTO]:
     query = (
         select(DataOrm)
         .options(joinedload(DataOrm.direction))
@@ -46,11 +44,12 @@ async def get_data(table_id: int = None, departament_id: int = None, direction_i
     res = await session.execute(query)
     result_orm = res.scalars().all()
     result_dto = [DataDTO.model_validate(row, from_attributes=True) for row in result_orm]
+
     return result_dto
 
 
 @router.get("/get_dep_data/{dep_id}")
-async def get_data(dep_id: int, session: AsyncSession = Depends(get_async_session)):
+async def get_data(dep_id: int, session: AsyncSession = Depends(get_async_session)) -> list[DataDTO]:
     query = (
         select(DataOrm)
         .filter(and_(DataOrm.departament_id == dep_id, DataOrm.direction_id == 1))
@@ -66,12 +65,12 @@ async def get_data(dep_id: int, session: AsyncSession = Depends(get_async_sessio
 
 
 @router.get("/get_chart")
-async def get_chart(session: AsyncSession = Depends(get_async_session)):
+async def get_chart(session: AsyncSession = Depends(get_async_session)) -> None:
     pass
 
 
 @router.put("/update_data")
-async def update_data(new_data: NewData, session: AsyncSession = Depends(get_async_session)):
+async def update_data(new_data: NewData, session: AsyncSession = Depends(get_async_session)) -> dict[str, str]:
     for key, value in new_data.values.items():
         query = (
             select(DataOrm)
@@ -96,7 +95,7 @@ async def update_data(new_data: NewData, session: AsyncSession = Depends(get_asy
 
 
 @router.get("/get_directions")
-async def get_directions(session: AsyncSession = Depends(get_async_session)):
+async def get_directions(session: AsyncSession = Depends(get_async_session)) -> list[DirectionDTO]:
     query = (
         select(DirectionOrm)
     )
@@ -109,7 +108,7 @@ async def get_directions(session: AsyncSession = Depends(get_async_session)):
 
 
 @router.get("/get_departaments")
-async def get_departaments(session: AsyncSession = Depends(get_async_session)):
+async def get_departaments(session: AsyncSession = Depends(get_async_session)) -> list[DepartamentDTO]:
     query = (
         select(DepartamentOrm)
     )
@@ -121,7 +120,7 @@ async def get_departaments(session: AsyncSession = Depends(get_async_session)):
 
 
 @router.get("/get_data_dep")
-async def get_data_dep(session: AsyncSession = Depends(get_async_session)):
+async def get_data_dep(session: AsyncSession = Depends(get_async_session)) -> list[DataWithoutJoinDTO]:
     query = (
         select(DepartamentOrm)
         .filter(DepartamentOrm.id == 1)
@@ -144,7 +143,7 @@ async def get_data_dep(session: AsyncSession = Depends(get_async_session)):
 
 
 @router.get("/get_config")
-async def get_config(session: AsyncSession = Depends(get_async_session)):
+async def get_config(session: AsyncSession = Depends(get_async_session)) -> ChartConfigDTO:
     query = (
         select(ChartConfig)
         .filter(ChartConfig.user_id == 2)
@@ -159,7 +158,7 @@ async def get_config(session: AsyncSession = Depends(get_async_session)):
 
 @router.put("/update_config")
 async def update_config(data: ChartConfigSchema, user: User = Depends(current_user),
-                        session: AsyncSession = Depends(get_async_session)):
+                        session: AsyncSession = Depends(get_async_session)) -> dict[str, str]:
     query = (
         select(ChartConfig)
         .filter(ChartConfig.user_id == user.id)

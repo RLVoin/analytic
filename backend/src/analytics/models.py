@@ -100,6 +100,14 @@ class ChartConfig(Base):
     config = Column(JSON)
 
 
+class Patient(Base):
+    __tablename__ = "patient"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    age: Mapped[int]
+    date_of_death = Column(Date)  # YYYY-MM-DD
+    reason_id: Mapped[int]
+
 
 # class Employer(Base):
 #     __tablename__ = "employer"
